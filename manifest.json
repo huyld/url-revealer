@@ -13,6 +13,8 @@
   },
 
   "permissions": [
+		"*://goo.gl/*",
+		"*://bit.ly/*",
     "activeTab",
     "notifications",
     "storage"
