@@ -13,8 +13,7 @@
   },
 
   "permissions": [
-		"*://goo.gl/*",
-		"*://bit.ly/*",
+    "<all_urls>",
     "activeTab",
     "notifications",
     "storage"
