@@ -27,14 +27,17 @@
 
   "background": {
     "scripts": [
-      "background.js"
+        "background.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": [ "<all_urls>" ],
-      "js": [ "/content_scripts/main-content-script.js" ]
+      "js": [
+          "services/reveal-url.js",
+          "/content_scripts/main-content-script.js"
+        ]
     }
   ]
 }
