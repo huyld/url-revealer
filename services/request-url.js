@@ -1,10 +1,10 @@
 /**
  * Return the final destination URL from the shortened URL
  *
- * @param {*} shortenedUrl
+ * @param {*} sourceUrl
  * @returns
  */
-function revealUrl(shortenedUrl) {
+function requestUrl(sourceUrl) {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = event => {
@@ -13,8 +13,8 @@ function revealUrl(shortenedUrl) {
                     resolve(event.target.responseURL);
                 }
             }
-        }
-        xhr.open('HEAD', shortenedUrl, true);
+        };
+        xhr.open('HEAD', sourceUrl, true);
         xhr.send();
     });
 }
