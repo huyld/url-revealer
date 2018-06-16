@@ -35,6 +35,7 @@
             "matches": [ "<all_urls>" ],
             "js": [
                 "/supported-domains.js",
+                "/services/url-parser.js",
                 "/services/request-url.js",
                 "/content_scripts/main-content-script.js"
             ]
