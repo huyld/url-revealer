@@ -37,7 +37,11 @@
                 "/supported-domains.js",
                 "/services/url-parser.js",
                 "/services/request-url.js",
+                "/services/tooltip-service.js",
                 "/content_scripts/main-content-script.js"
+            ],
+            "css": [
+                "assets/tooltip.css"
             ]
         }
     ]
