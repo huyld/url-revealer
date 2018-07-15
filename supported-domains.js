@@ -1,4 +1,5 @@
 const _7ly = '7.ly';
+const BIT_LY = 'bit.ly';
 const FLIC_KR = 'flic.kr';
 const GOO_GL = 'goo.gl';
 const GIT_IO = 'git.io';
@@ -10,6 +11,7 @@ const Y2U_BE = 'y2u.be';
 
 var supportedDomains = [
     _7ly,
+    BIT_LY,
     FLIC_KR,
     GOO_GL,
     GIT_IO,
