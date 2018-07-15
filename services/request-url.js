@@ -10,7 +10,7 @@ function requestUrl(sourceUrl) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onStateChangeCallback.bind(this, resolve, reject, xhr);
         switch (hostname) {
-            case TINYURL:
+            case TINYURL_COM:
                 // tinyurl.com doesn't allow HEAD method
                 xhr.open('GET', sourceUrl, true);
                 break;
