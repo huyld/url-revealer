@@ -1,7 +1,7 @@
 /**
  * Return the final destination URL from the shortened URL
  *
- * @param {*} sourceUrl
+ * @param {string} sourceUrl
  * @returns
  */
 function requestUrl(sourceUrl) {
@@ -10,11 +10,6 @@ function requestUrl(sourceUrl) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onStateChangeCallback.bind(this, resolve, reject, xhr);
         switch (hostname) {
-            case TINYURL_COM:
-                // tinyurl.com doesn't allow HEAD method
-                xhr.open('GET', sourceUrl, true);
-                break;
-
             default:
                 xhr.open('HEAD', sourceUrl, true);
                 break;
@@ -33,11 +28,9 @@ function requestUrl(sourceUrl) {
  */
 function onStateChangeCallback(resolve, reject, xhr, event) {
     if (event.target.readyState == 2) {
-        if (event.target.status == 200) {
-            resolve(event.target.responseURL);
+        resolve(event.target.responseURL);
 
-            // Only the header is necessary
-            xhr.abort();
-        }
+        // Only the header is necessary
+        xhr.abort();
     }
 }
