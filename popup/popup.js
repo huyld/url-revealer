@@ -9,5 +9,5 @@ function reportExecuteScriptError(error) {
  * When the popup loads, inject a content script into the active tab.
  * If we couldn't inject the script, handle the error.
  */
-browser.tabs.executeScript({ file: "/content_scripts/popup-content-script.js" })
+chrome.tabs.executeScript({ file: "/content_scripts/popup-content-script.js" })
     .catch(reportExecuteScriptError);
