@@ -1,5 +1,5 @@
 // Listen to connection from content script
-browser.runtime.onConnect.addListener(onContentScriptConnected);
+chrome.runtime.onConnect.addListener(onContentScriptConnected);
 
 var portFromContentScript;
 
