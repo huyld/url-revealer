@@ -7,26 +7,28 @@
  *      }
  * }
  *
- * @param {*} shortUrl
- * @param {*} originalUrl
+ * @param {string} shortUrl
+ * @param {string} originalUrl
+ * @param {function} callback
  */
-function updateUrl(shortUrl, originalUrl) {
+function updateUrl(shortUrl, originalUrl, callback) {
     let contentToStore = {};
     contentToStore[shortUrl] = {
         originalUrl: originalUrl,
         cachedDate: Date.now()
     };
-    browser.storage.local.set(contentToStore);
+    chrome.storage.local.set(contentToStore, callback);
 }
 
 /**
  * Get information of short URL from local storage
  *
- * @param {*} shortUrl
+ * @param {string} shortUrl
+ * @param {function} callback
  * @returns
  */
-function getCachedUrl(shortUrl) {
-    return browser.storage.local.get(shortUrl);
+function getCachedUrl(shortUrl, callback) {
+    return chrome.storage.local.get(shortUrl, callback);
 }
 
 /**
