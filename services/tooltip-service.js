@@ -11,7 +11,7 @@ function setUrlAttributeForAnchors() {
     for (let i = 0; i < anchors.length; i++) {
         const anchor = anchors[i];
         if (supportedDomains.indexOf(getHostName(anchor.href)) > -1) {
-            getCachedUrl(anchor.href).then(storedInfo => {
+            getCachedUrl(anchor.href, storedInfo => {
                 // Check if the URL is stored in cache
                 if (isCacheDataValid(storedInfo)) {
                     anchor.setAttribute(
