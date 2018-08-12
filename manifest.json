@@ -28,6 +28,10 @@
 
     "background": {
         "scripts": [
+            "background-scripts/supported-domains.js",
+            "background-scripts/url-parser.js",
+            "background-scripts/cache-service.js",
+            "background-scripts/request-url.js",
             "background-scripts/main-background.js"
         ]
     },
@@ -36,10 +40,6 @@
         {
             "matches": [ "<all_urls>" ],
             "js": [
-                "/supported-domains.js",
-                "/services/url-parser.js",
-                "/services/cache-service.js",
-                "/services/request-url.js",
                 "/services/tooltip-service.js",
                 "/content_scripts/main-content-script.js"
             ],
