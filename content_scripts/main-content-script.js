@@ -1,4 +1,8 @@
-(function () {
+
+// Port connected to background script
+var backgroundPort;
+
+(function() {
 
     // Create connection with background script
     connectToBackgroundScript(onReceivingMsgBackgroundScript);
@@ -10,7 +14,7 @@
  * @param {any} callback
  */
 function connectToBackgroundScript(callback) {
-    var backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
+    backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
     backgroundPort.postMessage({ greeting: "hello from content script" });
     backgroundPort.onMessage.addListener(msg => {
         callback(msg);
