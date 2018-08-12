@@ -28,7 +28,7 @@
 
     "background": {
         "scripts": [
-            "background-scripts/background.js"
+            "background-scripts/main-background.js"
         ]
     },
 
