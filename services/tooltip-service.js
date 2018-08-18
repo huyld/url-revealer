@@ -3,29 +3,21 @@ var anchors = document.getElementsByTagName('a');
 setUrlAttributeForAnchors();
 
 /**
- * Get original URL of anchors and set the result as its attribute.
- * Use cached data if available.
+ * Send url of all anchor tags to background for further process.
+ * If the response.success is true, this means the URL belongs to a supported domain,
+ * then set the result as anchor's attribute.
  *
  */
 function setUrlAttributeForAnchors() {
     for (let i = 0; i < anchors.length; i++) {
         const anchor = anchors[i];
-        if (supportedDomains.indexOf(getHostName(anchor.href)) > -1) {
-            getCachedUrl(anchor.href, storedInfo => {
-                // Check if the URL is stored in cache
-                if (isCacheDataValid(storedInfo)) {
-                    anchor.setAttribute(
-                        'data-url-tooltip',
-                        storedInfo[anchor.href].originalUrl
-                    );
-                } else {
-                    // Make new request for original URL if it's not in cache or too old
-                    requestUrl(anchor.href).then(originalURL => {
-                        anchor.setAttribute('data-url-tooltip', originalURL);
-                        updateUrl(anchor.href, originalURL);
-                    });
-                }
-            });
-        }
+        sendURLToBackground(anchor.href).then(response => {
+            if (response.success) {
+                anchor.setAttribute(
+                    'data-url-tooltip',
+                    response.orignalURL
+                );
+            }
+        });
     }
 }

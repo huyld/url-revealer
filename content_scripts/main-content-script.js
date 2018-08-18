@@ -30,3 +30,31 @@ function onReceivingMsgBackgroundScript(msg) {
     console.log("In content script, received message from background script: ");
     console.log(msg.greeting);
 }
+
+/**
+ * Send the raw URL to background to handle it
+ * The background script will return a response object
+ * boolean success:
+ *      true if background script was able to retrieve original URL of the raw URL
+ *      false if raw URL is invalid or does not belongs to a supported domain
+ * string url?: (optional) the original URL, only if success is true.
+ *
+ * @param {string} url
+ */
+function sendURLToBackground(url) {
+    return new Promise(resolve => {
+        chrome.runtime.sendMessage(
+            null,
+            {
+                command: 'check-and-handle-url',
+                payload: {
+                    url: url
+                }
+            },
+            null,
+            response => {
+                resolve(response);
+            }
+        );
+    });
+}

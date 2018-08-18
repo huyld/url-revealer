@@ -4,6 +4,16 @@ var portFromContentScript = [];
 // Listen to connection from content script
 chrome.runtime.onConnect.addListener(onContentScriptConnected);
 
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    console.debug('URL Revealer: Receive message from tab %s: ', sender.tab.id, msg.command, msg.payload);
+    if (msg.command === 'check-and-handle-url') {
+        processURL(msg.payload.url).then(response => {
+            sendResponse(response);
+        });
+    }
+    return true;
+});
+
 /**
  * Listener to connection from content script
  *
@@ -42,4 +52,49 @@ function onPortDisconnected(port) {
     if (index > -1) {
         portFromContentScript.splice(index, 1);
     }
+}
+
+/**
+ * Check if the URL is in supported domain list
+ *
+ * @param {*} url
+ * @returns
+ */
+function isURLSupported(url) {
+    return supportedDomains.indexOf(getHostName(url)) > -1 ? true : false;
+}
+
+/**
+ * Get destination of raw URL of if it belongs to a supported domain
+ * Use cached data if available.
+ *
+ * @param {string} url
+ * @returns
+ */
+function processURL(url) {
+    return new Promise(resolve => {
+        if (isURLSupported(url)) {
+            getCachedUrl(url, storedInfo => {
+                var response = {};
+                // Check if the URL is stored in cache
+                if (isCacheDataValid(storedInfo)) {
+                    response['success'] = true;
+                    response['orignalURL'] = storedInfo[url].originalUrl;
+                    resolve(response);
+                } else {
+                    // Make new request for original URL if it's not in cache or too old
+                    requestUrl(url).then(originalURL => {
+                        updateUrl(url, originalURL);
+                        response['success'] = true;
+                        response['orignalURL'] = storedInfo[url].originalUrl;
+                        resolve(response);
+                    });
+                }
+            });
+        } else {
+            var response = {};
+            response['success'] = false;
+            resolve(response);
+        }
+    });
 }
