@@ -1,7 +1,15 @@
-(function () {
+// List of all anchor elements in the current page
+var anchors = document.getElementsByTagName('a');
+
+// Port connected to background script
+var backgroundPort;
+
+(function() {
 
     // Create connection with background script
     connectToBackgroundScript(onReceivingMsgBackgroundScript);
+
+    processAnchorElements();
 })();
 
 /**
@@ -10,7 +18,7 @@
  * @param {any} callback
  */
 function connectToBackgroundScript(callback) {
-    var backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
+    backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
     backgroundPort.postMessage({ greeting: "hello from content script" });
     backgroundPort.onMessage.addListener(msg => {
         callback(msg);
@@ -25,4 +33,49 @@ function connectToBackgroundScript(callback) {
 function onReceivingMsgBackgroundScript(msg) {
     console.log("In content script, received message from background script: ");
     console.log(msg.greeting);
+}
+
+/**
+ * Send the raw URL to background to handle it
+ * The background script will return a response object
+ * boolean success:
+ *      true if background script was able to retrieve original URL of the raw URL
+ *      false if raw URL is invalid or does not belongs to a supported domain
+ * string url?: (optional) the original URL, only if success is true.
+ *
+ * @param {string} url
+ */
+function sendURLToBackground(url) {
+    return new Promise(resolve => {
+        chrome.runtime.sendMessage(
+            null,
+            {
+                command: 'check-and-handle-url',
+                payload: {
+                    url: url
+                }
+            },
+            null,
+            response => {
+                resolve(response);
+            }
+        );
+    });
+}
+
+/**
+ * Send url of all anchor tags to background for further process.
+ * If the response.success is true, this means the URL belongs to a supported domain,
+ * then set the result as anchor's attribute.
+ *
+ */
+function processAnchorElements() {
+    for (let i = 0; i < anchors.length; i++) {
+        const anchor = anchors[i];
+        sendURLToBackground(anchor.href).then(response => {
+            if (response.success) {
+                anchor.setAttribute('data-url-tooltip', response.orignalURL);
+            }
+        });
+    }
 }
