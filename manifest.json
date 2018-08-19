@@ -40,8 +40,7 @@
         {
             "matches": [ "<all_urls>" ],
             "js": [
-                "/content_scripts/main-content-script.js",
-                "/services/tooltip-service.js"
+                "/content_scripts/main-content-script.js"
             ],
             "css": [
                 "assets/tooltip.css"
