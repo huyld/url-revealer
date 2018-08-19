@@ -9,7 +9,7 @@ var backgroundPort;
     // Create connection with background script
     connectToBackgroundScript(onReceivingMsgBackgroundScript);
 
-    setUrlAttributeForAnchors();
+    processAnchorElements();
 })();
 
 /**
@@ -69,7 +69,7 @@ function sendURLToBackground(url) {
  * then set the result as anchor's attribute.
  *
  */
-function setUrlAttributeForAnchors() {
+function processAnchorElements() {
     for (let i = 0; i < anchors.length; i++) {
         const anchor = anchors[i];
         sendURLToBackground(anchor.href).then(response => {
