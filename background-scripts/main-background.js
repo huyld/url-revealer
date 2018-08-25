@@ -129,4 +129,27 @@ function onMenuCreated() {
  * @param {*} tab
  */
 function onClickContextMenu(info, tab) {
+    if (info.menuItemId === MENU_ID_COPY_URL) {
+        getCachedUrl(info.linkUrl, cachedUrl => {
+            if (!!cachedUrl && Object.keys(cachedUrl).length > 0) {
+                const originalUrl = cachedUrl[info.linkUrl].originalUrl;
+                if (!clipboardDom) {
+                    clipboardDom = document.createElement('input');
+                    clipboardDom.style.top = '-300px';
+                    clipboardDom.style.position = 'absolute';
+                    document.body.appendChild(clipboardDom);
+                }
+                clipboardDom.value = originalUrl;
+                clipboardDom.select();
+                const successCopied = document.execCommand('copy');
+                if (successCopied) {
+                    // TODO: notify content script
+                } else {
+                    // TODO: notify content script
+                }
+            } else {
+                // TODO: notify content script the url is not supported
+            }
+        })
+    }
 }
