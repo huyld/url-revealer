@@ -1,13 +1,10 @@
-// ID of context menu
-const copyTrueUrlMenuID = 'url-revealer-copy';
-
 // Input field used to set original URL to be copied to clipboard
 let clipboardDom;
 
 // Create context menu for link elements
 chrome.contextMenus.create(
     {
-        id: copyTrueUrlMenuID,
+        id: MENU_ID_COPY_URL,
         title: chrome.i18n.getMessage('menuItemCopyUrl'),
         contexts: ['link'],
         onclick: onClickContextMenu
@@ -23,7 +20,7 @@ chrome.runtime.onConnect.addListener(onContentScriptConnected);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     console.debug('URL Revealer: Receive message from tab %s: ', sender.tab.id, msg.command, msg.payload);
-    if (msg.command === 'check-and-handle-url') {
+    if (msg.command === CMD_CHECK_AND_HANDLE_URL) {
         processURL(msg.payload.url).then(response => {
             sendResponse(response);
         });

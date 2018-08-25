@@ -50,7 +50,7 @@ function sendURLToBackground(url) {
         chrome.runtime.sendMessage(
             null,
             {
-                command: 'check-and-handle-url',
+                command: CMD_CHECK_AND_HANDLE_URL,
                 payload: {
                     url: url
                 }

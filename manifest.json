@@ -37,6 +37,7 @@
 
     "background": {
         "scripts": [
+            "libs/constants.js",
             "background-scripts/supported-domains.js",
             "background-scripts/url-parser.js",
             "background-scripts/cache-service.js",
@@ -49,6 +50,7 @@
         {
             "matches": [ "<all_urls>" ],
             "js": [
+                "libs/constants.js",
                 "/content_scripts/main-content-script.js"
             ],
             "css": [
