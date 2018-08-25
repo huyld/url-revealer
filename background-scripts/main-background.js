@@ -1,6 +1,9 @@
 // Input field used to set original URL to be copied to clipboard
 let clipboardDom;
 
+// List of ports connected to content scripts
+var portFromContentScript = new Map();
+
 // Create context menu for link elements
 chrome.contextMenus.create(
     {
@@ -11,9 +14,6 @@ chrome.contextMenus.create(
     },
     onMenuCreated
 );
-
-// List of ports connected to content scripts
-var portFromContentScript = [];
 
 // Listen to connection from content script
 chrome.runtime.onConnect.addListener(onContentScriptConnected);
@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
  * @param {any} port
  */
 function onContentScriptConnected(port) {
-    portFromContentScript.push(port);
+    portFromContentScript.set(port.sender.tab.id, port);
     port.postMessage({ greeting: "hi there content script!" });
     port.onMessage.addListener(msg => {
         onReceivingMsgContentScript(msg);
@@ -62,10 +62,7 @@ function onPortDisconnected(port) {
     } else {
         console.debug('URL Revealer: port from tab %s disconnected', port.sender.tab.id, port);
     }
-    const index = portFromContentScript.indexOf(port);
-    if (index > -1) {
-        portFromContentScript.splice(index, 1);
-    }
+    const x = portFromContentScript.delete(port.sender.tab.id);
 }
 
 /**
