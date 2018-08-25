@@ -5,6 +5,7 @@
     "author": "HuyLD",
 
     "description": "Reveal the true destination of shortened URLs.",
+    "default_locale": "en",
 
     "applications": {
         "gecko": {
