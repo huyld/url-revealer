@@ -3,15 +3,15 @@
         "message": "Copy real link",
         "description": "Copy the original URL of the shortened URL."
     },
-    "msgCopydSuccess": {
+    "msgCopySuccess": {
         "message": "Original URL was copied to clipboard.",
         "description": "Message displays when the original URL was copied to clipboard."
     },
-    "msgCopydFailed": {
+    "msgCopyFailed": {
         "message": "Unable to copy original URL to clipboard.",
         "description": "Message displays when background script was unable to copy the original URL to clipboard."
     },
-    "msgNoSupportUrl": {
+    "msgNotSupportUrl": {
         "message": "This domain is not supported.",
         "description": "Message displays when user clicks on supported link."
     }
