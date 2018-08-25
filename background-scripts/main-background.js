@@ -1,3 +1,20 @@
+// ID of context menu
+const copyTrueUrlMenuID = 'url-revealer-copy';
+
+// Input field used to set original URL to be copied to clipboard
+let clipboardDom;
+
+// Create context menu for link elements
+chrome.contextMenus.create(
+    {
+        id: copyTrueUrlMenuID,
+        title: chrome.i18n.getMessage('menuItemCopyUrl'),
+        contexts: ['link'],
+        onclick: onClickContextMenu
+    },
+    onMenuCreated
+);
+
 // List of ports connected to content scripts
 var portFromContentScript = [];
 
@@ -97,4 +114,25 @@ function processURL(url) {
             resolve(response);
         }
     });
+}
+
+/**
+ * Callback after context menu created
+ *
+ */
+function onMenuCreated() {
+    if (chrome.runtime.lastError) {
+        console.log(`URL Revealer: Error: ${chrome.runtime.lastError}`);
+    } else {
+        console.log('URL Revealer: Context menu created successfully');
+    }
+}
+
+/**
+ * Handle event context menu clicked
+ *
+ * @param {*} info
+ * @param {*} tab
+ */
+function onClickContextMenu(info, tab) {
 }
