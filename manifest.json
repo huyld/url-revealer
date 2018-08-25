@@ -6,6 +6,12 @@
 
     "description": "Reveal the true destination of shortened URLs.",
 
+    "applications": {
+        "gecko": {
+            "strict_min_version": "57.0"
+        }
+    },
+
     "icons": {
         "16": "assets/main-icon@16px.png",
         "48": "assets/main-icon@48px.png",
@@ -16,6 +22,8 @@
     "permissions": [
         "<all_urls>",
         "activeTab",
+        "clipboardWrite",
+        "contextMenus",
         "notifications",
         "storage"
     ],
