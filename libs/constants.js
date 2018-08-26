@@ -1,3 +1,6 @@
+// Extension information
+const EXT_NAME = chrome.i18n.getMessage('extensionName');
+
 // CSS class
 const CSS_ANNOUNCER_CLASS = 'url-revealer-announcer';
 const CSS_ANNOUNCER_SHOW_CLASS = 'url-revealer-announcer-show';

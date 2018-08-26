@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "URL Revealer",
+    "name": "__MSG_extensionName__",
     "version": "2.0",
     "author": "HuyLD",
 
-    "description": "Reveal the true destination of shortened URLs.",
+    "description": "__MSG_extensionDescription__.",
     "default_locale": "en",
 
     "applications": {
@@ -32,7 +32,7 @@
     "browser_action": {
         "default_icon": "assets/main-icon@128px.png",
         "default_popup": "popup/popup.html",
-        "default_title": "URL Revealer"
+        "default_title": "__MSG_extensionName__"
     },
 
     "background": {

@@ -1,4 +1,12 @@
 {
+    "extensionName": {
+        "message": "URL Revealer",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "Reveal the true destination of shortened URLs.",
+        "description": "Description of the extension."
+    },
     "menuItemCopyUrl": {
         "message": "Copy real link",
         "description": "Copy the original URL of the shortened URL."
