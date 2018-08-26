@@ -143,7 +143,12 @@ function onClickContextMenu(info, tab) {
                 clipboardDom.select();
                 const successCopied = document.execCommand('copy');
                 if (successCopied) {
-                    // TODO: notify content script
+                    portFromContentScript.get(tab.id).postMessage({
+                        command: CMD_DISPLAY_MESSAGE,
+                        payload: {
+                            message: chrome.i18n.getMessage('msgCopySuccess')
+                        }
+                    });
                 } else {
                     // TODO: notify content script
                 }
