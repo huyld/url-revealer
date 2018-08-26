@@ -124,12 +124,14 @@ function onMenuCreated() {
 
 /**
  * Handle event context menu clicked
+ * If the original URL for the clicked link is in cache, copy it to clipboard
  *
  * @param {*} info
  * @param {*} tab
  */
 function onClickContextMenu(info, tab) {
     if (info.menuItemId === MENU_ID_COPY_URL) {
+        var messageToContent;
         getCachedUrl(info.linkUrl, cachedUrl => {
             if (!!cachedUrl && Object.keys(cachedUrl).length > 0) {
                 const originalUrl = cachedUrl[info.linkUrl].originalUrl;
@@ -143,18 +145,20 @@ function onClickContextMenu(info, tab) {
                 clipboardDom.select();
                 const successCopied = document.execCommand('copy');
                 if (successCopied) {
-                    portFromContentScript.get(tab.id).postMessage({
-                        command: CMD_DISPLAY_MESSAGE,
-                        payload: {
-                            message: chrome.i18n.getMessage('msgCopySuccess')
-                        }
-                    });
+                    messageToContent = chrome.i18n.getMessage('msgCopySuccess');
                 } else {
-                    // TODO: notify content script
+                    messageToContent = chrome.i18n.getMessage('msgCopyFailed');
                 }
+
             } else {
-                // TODO: notify content script the url is not supported
+                messageToContent = chrome.i18n.getMessage('msgNotSupportUrl');
             }
+            portFromContentScript.get(tab.id).postMessage({
+                command: CMD_DISPLAY_MESSAGE,
+                payload: {
+                    message: messageToContent
+                }
+            });
         })
     }
 }
