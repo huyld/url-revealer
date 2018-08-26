@@ -33,7 +33,6 @@ function createAnnouncer() {
  */
 function connectToBackgroundScript(callback) {
     backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
-    backgroundPort.postMessage({ greeting: "hello from content script" });
     backgroundPort.onMessage.addListener(msg => {
         callback(msg);
     });
@@ -45,7 +44,6 @@ function connectToBackgroundScript(callback) {
  * @param {any} msg
  */
 function onReceivingMsgBackgroundScript(msg) {
-    console.log("In content script, received message from background script: ");
     if (msg.command === CMD_DISPLAY_MESSAGE) {
         displayMessage(msg.payload.message);
     }

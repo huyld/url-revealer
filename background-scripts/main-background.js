@@ -35,7 +35,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
  */
 function onContentScriptConnected(port) {
     portFromContentScript.set(port.sender.tab.id, port);
-    port.postMessage({ greeting: "hi there content script!" });
     port.onMessage.addListener(msg => {
         onReceivingMsgContentScript(msg);
     });
@@ -48,7 +47,7 @@ function onContentScriptConnected(port) {
  * @param {any} msg
  */
 function onReceivingMsgContentScript(msg) {
-    console.log(EXT_NAME + ': In background script, received message from content script', msg);
+    console.debug(EXT_NAME + ': In background script, received message from content script', msg);
 }
 
 /**
@@ -116,9 +115,7 @@ function processURL(url) {
  */
 function onMenuCreated() {
     if (chrome.runtime.lastError) {
-        console.log(EXT_NAME + `: Error: ${chrome.runtime.lastError}`);
-    } else {
-        console.log(EXT_NAME + ': Context menu created successfully');
+        console.log(EXT_NAME + ': Error on creating menu: ', chrome.runtime.lastError);
     }
 }
 
