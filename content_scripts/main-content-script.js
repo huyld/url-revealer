@@ -32,7 +32,7 @@ function createAnnouncer() {
  * @param {any} callback
  */
 function connectToBackgroundScript(callback) {
-    backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
+    backgroundPort = chrome.runtime.connect({ name: 'port-from-cs' });
     backgroundPort.onMessage.addListener(msg => {
         callback(msg);
     });

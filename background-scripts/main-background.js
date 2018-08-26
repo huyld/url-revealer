@@ -19,7 +19,12 @@ chrome.contextMenus.create(
 chrome.runtime.onConnect.addListener(onContentScriptConnected);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    console.debug(EXT_NAME + ': Receive message from tab %s: ', sender.tab.id, msg.command, msg.payload);
+    console.debug(
+        EXT_NAME + ': Receive message from tab %s: ',
+        sender.tab.id,
+        msg.command,
+        msg.payload
+    );
     if (msg.command === CMD_CHECK_AND_HANDLE_URL) {
         processURL(msg.payload.url).then(response => {
             sendResponse(response);
@@ -47,7 +52,11 @@ function onContentScriptConnected(port) {
  * @param {any} msg
  */
 function onReceivingMsgContentScript(msg) {
-    console.debug(EXT_NAME + ': In background script, received message from content script', msg);
+    console.debug(
+        EXT_NAME +
+            ': In background script, received message from content script',
+        msg
+    );
 }
 
 /**
@@ -57,9 +66,16 @@ function onReceivingMsgContentScript(msg) {
  */
 function onPortDisconnected(port) {
     if (chrome.runtime.lastError) {
-        console.error(EXT_NAME + ': port disconnected due to an error', chrome.runtime.lastError.message);
+        console.error(
+            EXT_NAME + ': port disconnected due to an error',
+            chrome.runtime.lastError.message
+        );
     } else {
-        console.debug(EXT_NAME + ': port from tab %s disconnected', port.sender.tab.id, port);
+        console.debug(
+            EXT_NAME + ': port from tab %s disconnected',
+            port.sender.tab.id,
+            port
+        );
     }
     const x = portFromContentScript.delete(port.sender.tab.id);
 }
@@ -115,7 +131,10 @@ function processURL(url) {
  */
 function onMenuCreated() {
     if (chrome.runtime.lastError) {
-        console.log(EXT_NAME + ': Error on creating menu: ', chrome.runtime.lastError);
+        console.log(
+            EXT_NAME + ': Error on creating menu: ',
+            chrome.runtime.lastError
+        );
     }
 }
 
@@ -146,7 +165,6 @@ function onClickContextMenu(info, tab) {
                 } else {
                     messageToContent = chrome.i18n.getMessage('msgCopyFailed');
                 }
-
             } else {
                 messageToContent = chrome.i18n.getMessage('msgNotSupportUrl');
             }
@@ -156,6 +174,6 @@ function onClickContextMenu(info, tab) {
                     message: messageToContent
                 }
             });
-        })
+        });
     }
 }
