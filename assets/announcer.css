@@ -1,0 +1,44 @@
+.url-revealer-announcer {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.2;
+
+    color: #fff;
+    text-align: center;
+
+    position: fixed;
+    display: none;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.url-revealer-announcer-show {
+    display: block;
+    height: auto;
+    width: auto;
+    padding: 12px;
+
+    animation-name: flashing;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(.65,.05,.36,1);
+}
+
+@keyframes flashing {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}

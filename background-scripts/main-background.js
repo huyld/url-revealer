@@ -1,12 +1,31 @@
+// Input field used to set original URL to be copied to clipboard
+let clipboardDom;
+
 // List of ports connected to content scripts
-var portFromContentScript = [];
+var portFromContentScript = new Map();
+
+// Create context menu for link elements
+chrome.contextMenus.create(
+    {
+        id: MENU_ID_COPY_URL,
+        title: chrome.i18n.getMessage('menuItemCopyUrl'),
+        contexts: ['link'],
+        onclick: onClickContextMenu
+    },
+    onMenuCreated
+);
 
 // Listen to connection from content script
 chrome.runtime.onConnect.addListener(onContentScriptConnected);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    console.debug('URL Revealer: Receive message from tab %s: ', sender.tab.id, msg.command, msg.payload);
-    if (msg.command === 'check-and-handle-url') {
+    console.debug(
+        EXT_NAME + ': Receive message from tab %s: ',
+        sender.tab.id,
+        msg.command,
+        msg.payload
+    );
+    if (msg.command === CMD_CHECK_AND_HANDLE_URL) {
         processURL(msg.payload.url).then(response => {
             sendResponse(response);
         });
@@ -20,8 +39,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
  * @param {any} port
  */
 function onContentScriptConnected(port) {
-    portFromContentScript.push(port);
-    port.postMessage({ greeting: "hi there content script!" });
+    portFromContentScript.set(port.sender.tab.id, port);
     port.onMessage.addListener(msg => {
         onReceivingMsgContentScript(msg);
     });
@@ -34,7 +52,11 @@ function onContentScriptConnected(port) {
  * @param {any} msg
  */
 function onReceivingMsgContentScript(msg) {
-    console.log("In background script, received message from content script", msg);
+    console.debug(
+        EXT_NAME +
+            ': In background script, received message from content script',
+        msg
+    );
 }
 
 /**
@@ -44,14 +66,18 @@ function onReceivingMsgContentScript(msg) {
  */
 function onPortDisconnected(port) {
     if (chrome.runtime.lastError) {
-        console.error('URL Revealer: port disconnected due to an error', chrome.runtime.lastError.message);
+        console.error(
+            EXT_NAME + ': port disconnected due to an error',
+            chrome.runtime.lastError.message
+        );
     } else {
-        console.debug('URL Revealer: port from tab %s disconnected', port.sender.tab.id, port);
+        console.debug(
+            EXT_NAME + ': port from tab %s disconnected',
+            port.sender.tab.id,
+            port
+        );
     }
-    const index = portFromContentScript.indexOf(port);
-    if (index > -1) {
-        portFromContentScript.splice(index, 1);
-    }
+    const x = portFromContentScript.delete(port.sender.tab.id);
 }
 
 /**
@@ -97,4 +123,57 @@ function processURL(url) {
             resolve(response);
         }
     });
+}
+
+/**
+ * Callback after context menu created
+ *
+ */
+function onMenuCreated() {
+    if (chrome.runtime.lastError) {
+        console.log(
+            EXT_NAME + ': Error on creating menu: ',
+            chrome.runtime.lastError
+        );
+    }
+}
+
+/**
+ * Handle event context menu clicked
+ * If the original URL for the clicked link is in cache, copy it to clipboard
+ *
+ * @param {*} info
+ * @param {*} tab
+ */
+function onClickContextMenu(info, tab) {
+    if (info.menuItemId === MENU_ID_COPY_URL) {
+        var messageToContent;
+        getCachedUrl(info.linkUrl, cachedUrl => {
+            if (!!cachedUrl && Object.keys(cachedUrl).length > 0) {
+                const originalUrl = cachedUrl[info.linkUrl].originalUrl;
+                if (!clipboardDom) {
+                    clipboardDom = document.createElement('input');
+                    clipboardDom.style.top = '-300px';
+                    clipboardDom.style.position = 'absolute';
+                    document.body.appendChild(clipboardDom);
+                }
+                clipboardDom.value = originalUrl;
+                clipboardDom.select();
+                const successCopied = document.execCommand('copy');
+                if (successCopied) {
+                    messageToContent = chrome.i18n.getMessage('msgCopySuccess');
+                } else {
+                    messageToContent = chrome.i18n.getMessage('msgCopyFailed');
+                }
+            } else {
+                messageToContent = chrome.i18n.getMessage('msgNotSupportUrl');
+            }
+            portFromContentScript.get(tab.id).postMessage({
+                command: CMD_DISPLAY_MESSAGE,
+                payload: {
+                    message: messageToContent
+                }
+            });
+        });
+    }
 }

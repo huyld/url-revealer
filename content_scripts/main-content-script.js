@@ -4,7 +4,11 @@ var anchors = document.getElementsByTagName('a');
 // Port connected to background script
 var backgroundPort;
 
+// DOM object to display message
+var announcer;
+
 (function() {
+    createAnnouncer();
 
     // Create connection with background script
     connectToBackgroundScript(onReceivingMsgBackgroundScript);
@@ -13,13 +17,22 @@ var backgroundPort;
 })();
 
 /**
+ * Creating the annoucer DOM object and append it to the body
+ *
+ */
+function createAnnouncer() {
+    announcer = document.createElement('div');
+    announcer.classList.add(CSS_ANNOUNCER_CLASS);
+    document.body.appendChild(announcer);
+}
+
+/**
  * Create connection with background script
  *
  * @param {any} callback
  */
 function connectToBackgroundScript(callback) {
-    backgroundPort = chrome.runtime.connect({ name: "port-from-cs" });
-    backgroundPort.postMessage({ greeting: "hello from content script" });
+    backgroundPort = chrome.runtime.connect({ name: 'port-from-cs' });
     backgroundPort.onMessage.addListener(msg => {
         callback(msg);
     });
@@ -31,8 +44,9 @@ function connectToBackgroundScript(callback) {
  * @param {any} msg
  */
 function onReceivingMsgBackgroundScript(msg) {
-    console.log("In content script, received message from background script: ");
-    console.log(msg.greeting);
+    if (msg.command === CMD_DISPLAY_MESSAGE) {
+        displayMessage(msg.payload.message);
+    }
 }
 
 /**
@@ -50,7 +64,7 @@ function sendURLToBackground(url) {
         chrome.runtime.sendMessage(
             null,
             {
-                command: 'check-and-handle-url',
+                command: CMD_CHECK_AND_HANDLE_URL,
                 payload: {
                     url: url
                 }
@@ -77,5 +91,21 @@ function processAnchorElements() {
                 anchor.setAttribute('data-url-tooltip', response.orignalURL);
             }
         });
+    }
+}
+
+/**
+ * Displaying the message using announcer DOM object
+ *
+ * @param {string} msg
+ */
+function displayMessage(msg) {
+    if (!!msg) {
+        announcer.textContent = msg;
+        announcer.classList.add(CSS_ANNOUNCER_SHOW_CLASS);
+        setTimeout(() => {
+            announcer.textContent = '';
+            announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS);
+        }, 3000);
     }
 }
