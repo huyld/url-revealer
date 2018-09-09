@@ -110,10 +110,11 @@ function processURL(url) {
                 } else {
                     // Make new request for original URL if it's not in cache or too old
                     requestUrl(url).then(originalURL => {
-                        updateUrl(url, originalURL);
-                        response['success'] = true;
-                        response['originalURL'] = storedInfo[url].originalUrl;
-                        resolve(response);
+                        updateUrl(url, originalURL, () => {
+                            response['success'] = true;
+                            response['originalURL'] = originalURL;
+                            resolve(response);
+                        });
                     });
                 }
             });
