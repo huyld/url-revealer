@@ -88,7 +88,7 @@ function processAnchorElements() {
         const anchor = anchors[i];
         sendURLToBackground(anchor.href).then(response => {
             if (response.success) {
-                anchor.setAttribute('data-url-tooltip', response.orignalURL);
+                anchor.setAttribute('data-url-tooltip', response.originalURL);
             }
         });
     }
