@@ -1,7 +1,3 @@
-[data-url-tooltip]{
-    position: relative;
-}
-
 /* The bubble of the tooltip */
 [data-url-tooltip]::after {
     content: attr(data-url-tooltip);
@@ -22,10 +18,10 @@
     transition: all 0.5s;
 }
 
-[data-url-tooltip]::before, [data-url-tooltip]::after {
+[data-url-tooltip]::after {
     opacity: 0;
 }
 
-[data-url-tooltip]:hover::before, [data-url-tooltip]:hover::after {
+[data-url-tooltip]:hover::after {
     opacity: 1;
 }
