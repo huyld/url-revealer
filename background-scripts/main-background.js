@@ -87,7 +87,18 @@ function onPortDisconnected(port) {
  * @returns
  */
 function isURLSupported(url) {
-    return supportedDomains.indexOf(getHostName(url)) > -1 ? true : false;
+    if (supportedDomains.indexOf(getHostName(url)) > -1) {
+        const hostname = getHostName(url);
+        // The string after the hostname. E.g. '/abc' in 'tinyurl.com/abc'
+        const tail = url.substring(url.indexOf(hostname) + hostname.length, url.length);
+        if (tail === '/' || tail === '') {
+            // The URL is just the homepage of the shortening service
+            return false;
+        } else {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
