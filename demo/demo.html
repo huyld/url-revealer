@@ -10,12 +10,37 @@
         a {
             text-decoration: none;
         }
+        .disclaimer {
+            padding: 10px 30px;
+            margin: auto 30px 40px;
+            background-color: lightgray;
+            font-family: Arial, sans-serif;
+        }
+        .disclaimer > h2 {
+            color: darkred;
+        }
+        .disclaimer > p:first-of-type {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .disclaimer > p:last-of-type {
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
     <h1>Demo page</h1>
-    <h3>Shorten URLs from supported domains</h3>
+    <section class="disclaimer">
+        <h2>Disclaimer</h2>
+        <p>
+            The author of this extension is not responsible for the content of the below URLs. The author does not involve in any promotional, propagative activities of these URLs. These URLs are here for the demonstration purpose of the extension only.
+        </p>
+        <p>
+            <i>Some URL shortenning services don't accept new URLs anymore so I'm unable to shorten new URL using those services. I have to use shortened URLs created by others. Although I try to keep the sample URLs as neutral as posible, some URLs content may appear as advertisement or promotion to some people.</i>
+        </p>
+    </section>
+    <h3>Shortened URLs from supported domains</h3>
     <ul>
         <li><a href="http://2tu.us/1ua7">2tu.us => offensive-security.com - Penetration Testing...</a></li>
         <li><a href="http://7.ly/tWxp">7.ly => Google Maps - Mua Cave</a></li>
