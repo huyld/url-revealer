@@ -29,12 +29,6 @@
         "storage"
     ],
 
-    "browser_action": {
-        "default_icon": "assets/main-icon@128px.png",
-        "default_popup": "popup/popup.html",
-        "default_title": "__MSG_extensionName__"
-    },
-
     "background": {
         "scripts": [
             "libs/constants.js",
