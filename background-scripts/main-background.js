@@ -87,7 +87,7 @@ function onPortDisconnected(port) {
  * @returns
  */
 function isURLSupported(url) {
-    if (supportedDomains.indexOf(getHostName(url)) > -1) {
+    if (SUPPORTED_DOMAINS.indexOf(getHostName(url)) > -1) {
         const hostname = getHostName(url);
         // The string after the hostname. E.g. '/abc' in 'tinyurl.com/abc'
         const tail = url.substring(url.indexOf(hostname) + hostname.length, url.length);

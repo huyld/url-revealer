@@ -35,7 +35,7 @@ const Y2U_BE = 'y2u.be';
 const YATUC_COM = 'yatuc.com';
 const YEP_IT = 'yep.it';
 
-var supportedDomains = [
+const SUPPORTED_DOMAINS = [
     _2TU_US,
     _7ly,
     ALTURL_COM,
