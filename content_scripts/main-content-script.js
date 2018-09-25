@@ -84,9 +84,33 @@ function sendURLToBackground(url) {
  *
  */
 function processAnchorElements() {
+    const currentDomain = getHostName(window.location.href);
+
     for (let i = 0; i < anchors.length; i++) {
         const anchor = anchors[i];
-        sendURLToBackground(anchor.href).then(response => {
+        var url = '';
+
+        if (currentDomain === FACEBOOK_COM) {
+            // External links in FB aren't exposed initially.
+            // Thus we need to detect and decode it
+            // before sending to background script for further processing
+            const href = anchor.href;
+            if (href.indexOf(FACEBOOK_REDIRECT_URL) > -1) {
+                // If this URL is an external link, get the external URL and decode it
+                let matches = href.match(FB_REDIRECT_URL_REGEX);
+                if (!!matches && matches.length > 1) {
+                    const encodedURL = matches[1];
+                    url = decodeURIComponent(encodedURL);
+                } else {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        } else {
+            url = anchor.href;
+        }
+        sendURLToBackground(url).then(response => {
             if (response.success) {
                 anchor.setAttribute('data-url-tooltip', response.originalURL);
             }

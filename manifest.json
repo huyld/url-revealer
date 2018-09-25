@@ -45,6 +45,7 @@
             "matches": [ "<all_urls>" ],
             "js": [
                 "libs/constants.js",
+                "libs/url-parser.js",
                 "/content_scripts/main-content-script.js"
             ],
             "css": [
