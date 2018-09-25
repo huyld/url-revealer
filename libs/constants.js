@@ -11,3 +11,11 @@ const MENU_ID_COPY_URL = 'url-revealer-copy';
 // COMMANDS
 const CMD_DISPLAY_MESSAGE = 'display-message';
 const CMD_CHECK_AND_HANDLE_URL = 'check-and-handle-url';
+
+// REGEX
+const FB_REDIRECT_URL_REGEX = /[^=]*=(.+)(?=&h=)/;
+const HOSTNAME_REGEX = /:\/\/(www[0-9]?\.)?(.[^/:]+)/i;
+
+// DOMAINS
+const FACEBOOK_COM = 'facebook.com';
+const FACEBOOK_REDIRECT_URL = 'l.facebook.com/l.php?u=';

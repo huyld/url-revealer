@@ -32,8 +32,8 @@
     "background": {
         "scripts": [
             "libs/constants.js",
-            "background-scripts/supported-domains.js",
-            "background-scripts/url-parser.js",
+            "libs/supported-domains.js",
+            "libs/url-parser.js",
             "background-scripts/cache-service.js",
             "background-scripts/request-url.js",
             "background-scripts/main-background.js"
@@ -45,6 +45,7 @@
             "matches": [ "<all_urls>" ],
             "js": [
                 "libs/constants.js",
+                "libs/url-parser.js",
                 "/content_scripts/main-content-script.js"
             ],
             "css": [

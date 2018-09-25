@@ -1,5 +1,3 @@
-const hostnnameRegex = /:\/\/(www[0-9]?\.)?(.[^/:]+)/i;
-
 /**
  * Extract hostname from full URL
  *
@@ -7,7 +5,7 @@ const hostnnameRegex = /:\/\/(www[0-9]?\.)?(.[^/:]+)/i;
  * @returns
  */
 function getHostName(url) {
-    var match = url.match(hostnnameRegex);
+    var match = url.match(HOSTNAME_REGEX);
     if (
         match != null &&
         match.length > 2 &&
