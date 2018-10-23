@@ -19,3 +19,7 @@ const HOSTNAME_REGEX = /:\/\/(www[0-9]?\.)?(.[^/:]+)/i;
 // DOMAINS
 const FACEBOOK_COM = 'facebook.com';
 const FACEBOOK_REDIRECT_URL = 'l.facebook.com/l.php?u=';
+
+// CONFIGURATION
+const WAITING_INTERVAL = 2000;
+const WAITING_RETRY_MAX = 10;
