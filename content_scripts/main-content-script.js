@@ -32,7 +32,7 @@ var announcer;
                         processAnchorElements(anchors);
                     }
                 }).catch(error => {
-                    console.log(
+                    console.warn(
                         EXT_NAME + ': Error on loading target DOMs: ',
                         error.message
                     );
@@ -128,7 +128,7 @@ function waitForTargetDOM(selector) {
                     clearInterval(interval);
                     resolve(dom);
                 } else if (tries >= WAITING_RETRY_MAX) {
-                    reject(new Error('Timeout: waiting for feed too long'));
+                    reject(new Error(`Timeout! Waiting for "${selector}" too long`));
                 }
             }, WAITING_INTERVAL);
         }
