@@ -42,10 +42,8 @@ var announcer;
             break;
         }
         default: {
-            targetDOMs.forEach(target => {
-                const anchors = target.getElementsByTagName('a');
-                processAnchorElements(anchors);
-            });
+            const anchors = document.getElementsByTagName('a');
+            processAnchorElements(anchors);
             break;
         }
     }
