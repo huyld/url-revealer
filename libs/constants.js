@@ -20,6 +20,7 @@ const HOSTNAME_REGEX = /:\/\/(www[0-9]?\.)?(.[^/:]+)/i;
 // DOMAINS
 const FACEBOOK_COM = 'facebook.com';
 const FACEBOOK_REDIRECT_URL = 'l.facebook.com/l.php?u=';
+const TWITTER_COM = 'twitter.com';
 const YOUTUBE_COM = 'youtube.com';
 const YOUTUBE_REDIRECT_URL = '/redirect';
 
@@ -31,6 +32,12 @@ const TARGET_DOMS = {
     'facebook.com': [
         {   // Feed
             selector: 'div[role="feed"]',
+            mutable: true
+        }
+    ],
+    'twitter.com': [
+        {
+            selector: 'ol#stream-items-id',
             mutable: true
         }
     ],

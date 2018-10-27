@@ -15,8 +15,9 @@ var announcer;
     connectToBackgroundScript(onReceivingMsgBackgroundScript);
 
     switch(currentDomain) {
-        case YOUTUBE_COM:
-        case FACEBOOK_COM: {
+        case FACEBOOK_COM:
+        case TWITTER_COM:
+        case YOUTUBE_COM: {
             TARGET_DOMS[currentDomain].forEach(target => {
                 waitForTargetDOM(target.selector).then(targetDOM => {
                     if (target.mutable) {
@@ -149,11 +150,21 @@ function observeMutation(observedTarget) {
     const observer = new MutationObserver(mutationsList => {
         mutationsList.forEach(mutation => {
             if (mutation.type === 'childList') {
-                const anchors = Array.prototype.filter.call(
+                const anchors = Array.prototype.map.call(
                     mutation.addedNodes,
-                    node => node.nodeName.toLowerCase() === 'a' ? true : false
-                );
-                processAnchorElements(anchors);
+                    node => {
+                        if (currentDomain === TWITTER_COM) {
+                            if (node.nodeName.toLowerCase() === 'li' && node.classList.contains('stream-item')) {
+                                return Array.from(node.querySelectorAll('a'));
+                            }
+                        } else {
+                            return node.nodeName.toLowerCase() === 'a' ? [node] : null;
+                        }
+                    }
+                ).filter(node => !!node && node.length);
+
+                // Flatten the array of anchors then process it
+                processAnchorElements([].concat.apply([], anchors));
             } else if (mutation.type === 'attributes' && mutation.target.nodeName.toLowerCase() === 'a') {
                 processAnchorElements([mutation.target]);
             }
@@ -193,6 +204,12 @@ function processAnchorElements(anchors) {
                 } else {
                     continue;
                 }
+                break;
+            }
+
+            case TWITTER_COM: {
+                const expandedUrl = anchor.getAttribute('data-expanded-url');
+                url = expandedUrl ? expandedUrl : '';
                 break;
             }
 
