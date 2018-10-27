@@ -3,6 +3,7 @@ const _7ly = '7.ly';
 const ALTURL_COM = 'alturl.com';
 const B_LINK = 'b.link';
 const BIT_LY = 'bit.ly';
+const BITLY_IS = 'bitly.is';
 const BUDURL_COM = 'budurl.com';
 const CHILP_IT = 'chilp.it';
 const DOIOP_COM = 'doiop.com';
@@ -41,6 +42,7 @@ const SUPPORTED_DOMAINS = [
     ALTURL_COM,
     B_LINK,
     BIT_LY,
+    BITLY_IS,
     BUDURL_COM,
     CHILP_IT,
     DOIOP_COM,
