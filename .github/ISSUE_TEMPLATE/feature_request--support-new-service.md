@@ -1,5 +1,5 @@
 ---
-name: 'Feature request'
+name: 'Feature request: support new service'
 about: 'Request support for new URL shortening service '
 
 ---
