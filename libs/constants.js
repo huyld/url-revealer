@@ -4,6 +4,7 @@ const EXT_NAME = chrome.i18n.getMessage('extensionName');
 // CSS class
 const CSS_ANNOUNCER_CLASS = 'url-revealer-announcer';
 const CSS_ANNOUNCER_SHOW_CLASS = 'url-revealer-announcer-show';
+const CSS_ANIMATION_NO_REPEAT_CLASS = 'url-revealer-animation-no-repeat';
 
 // ID of context menu
 const MENU_ID_COPY_URL = 'url-revealer-copy';
@@ -25,6 +26,7 @@ const YOUTUBE_COM = 'youtube.com';
 const YOUTUBE_REDIRECT_URL = '/redirect';
 
 // CONFIGURATION
+const ANNOUNCER_FLASHING_INTERVAL = 3000;
 const WAITING_INTERVAL = 2000;
 const WAITING_RETRY_MAX = 10;
 

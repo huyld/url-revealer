@@ -50,8 +50,7 @@
                 "/content_scripts/main-content-script.js"
             ],
             "css": [
-                "assets/announcer.css",
-                "assets/tooltip.css"
+                "assets/announcer.css"
             ]
         }
     ]

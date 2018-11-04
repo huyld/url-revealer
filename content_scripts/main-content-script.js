@@ -235,6 +235,12 @@ function processAnchorElements(anchors) {
             sendURLToBackground(url).then(response => {
                 if (response.success) {
                     anchor.setAttribute('data-url-tooltip', response.originalURL);
+                    anchor.addEventListener('mouseenter', e => {
+                        displayMessage(response.originalURL, true);
+                    });
+                    anchor.addEventListener('mouseleave', e => {
+                        hideMessage();
+                    });
                 }
             });
         }
@@ -244,15 +250,29 @@ function processAnchorElements(anchors) {
 /**
  * Displaying the message using announcer DOM object
  *
- * @param {string} msg
+ * @param {string} msg the message
+ * @param {boolean} isURL true if the message is URL
  */
-function displayMessage(msg) {
+function displayMessage(msg, isURL = false) {
     if (!!msg) {
         announcer.textContent = msg;
         announcer.classList.add(CSS_ANNOUNCER_SHOW_CLASS);
-        setTimeout(() => {
-            announcer.textContent = '';
-            announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS);
-        }, 3000);
+
+        if(isURL) {
+            announcer.classList.add(CSS_ANIMATION_NO_REPEAT_CLASS);
+        } else {
+            setTimeout(() => {
+                hideMessage();
+            }, ANNOUNCER_FLASHING_INTERVAL);
+        }
     }
+}
+
+/**
+ * Hide the announcer
+ *
+ */
+function hideMessage() {
+    announcer.textContent = '';
+    announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS, CSS_ANIMATION_NO_REPEAT_CLASS);
 }
