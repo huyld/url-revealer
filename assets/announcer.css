@@ -18,6 +18,10 @@
     overflow: hidden;
 }
 
+.url-revealer-announcer-show.url-revealer-animation-no-repeat {
+    animation-iteration-count: 1;
+}
+
 .url-revealer-announcer-show {
     display: block;
     height: auto;

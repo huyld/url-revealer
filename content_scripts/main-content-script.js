@@ -258,7 +258,9 @@ function displayMessage(msg, isURL = false) {
         announcer.textContent = msg;
         announcer.classList.add(CSS_ANNOUNCER_SHOW_CLASS);
 
-        if(!isURL) {
+        if(isURL) {
+            announcer.classList.add(CSS_ANIMATION_NO_REPEAT_CLASS);
+        } else {
             setTimeout(() => {
                 hideMessage();
             }, ANNOUNCER_FLASHING_INTERVAL);
@@ -272,5 +274,5 @@ function displayMessage(msg, isURL = false) {
  */
 function hideMessage() {
     announcer.textContent = '';
-    announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS);
+    announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS, CSS_ANIMATION_NO_REPEAT_CLASS);
 }
