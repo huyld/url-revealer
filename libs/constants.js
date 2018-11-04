@@ -25,6 +25,7 @@ const YOUTUBE_COM = 'youtube.com';
 const YOUTUBE_REDIRECT_URL = '/redirect';
 
 // CONFIGURATION
+const ANNOUNCER_FLASHING_INTERVAL = 3000;
 const WAITING_INTERVAL = 2000;
 const WAITING_RETRY_MAX = 10;
 
