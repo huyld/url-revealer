@@ -8,6 +8,9 @@ var backgroundPort;
 // DOM object to display message
 var announcer;
 
+// The last anchor element that was right-clicked
+var lastRightClickedAnchor;
+
 (function() {
     createAnnouncer();
 
@@ -184,6 +187,9 @@ function processAnchorElements(anchors) {
         const anchor = anchors[i];
         const url = extractLongLink(anchor);
 
+        // Add listener for right-click callback
+        addOnContextMenuEventListener(anchor);
+
         if (url !== '') {
             sendURLToBackground(url).then(response => {
                 if (response.success) {
@@ -279,4 +285,16 @@ function displayMessage(msg, isURL = false) {
 function hideMessage() {
     announcer.textContent = '';
     announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS, CSS_ANIMATION_NO_REPEAT_CLASS);
+}
+
+/**
+ * Save the anchor element that user right-clicks on
+ *
+ * @param {Element} anchor
+ */
+function addOnContextMenuEventListener(anchor) {
+    anchor.addEventListener('contextmenu', event => {
+        lastRightClickedAnchor = event.target;
+        return true;
+    });
 }
