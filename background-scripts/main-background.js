@@ -40,8 +40,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
  */
 function onContentScriptConnected(port) {
     portFromContentScript.set(port.sender.tab.id, port);
-    port.onMessage.addListener(msg => {
-        onReceivingMsgContentScript(msg);
+    port.onMessage.addListener((msg, port) => {
+        onReceivingMsgContentScript(msg, port);
     });
     port.onDisconnect.addListener(onPortDisconnected);
 }
@@ -50,13 +50,25 @@ function onContentScriptConnected(port) {
  * Callback when receive message from content script
  *
  * @param {any} msg
+ * @param {Port} port the port the the content script that sent the message
  */
-function onReceivingMsgContentScript(msg) {
+function onReceivingMsgContentScript(msg, port) {
     console.debug(
         EXT_NAME +
             ': In background script, received message from content script',
         msg
     );
+
+    if (msg.command === CMD_LONG_LINK_EXTRACTED) {
+        copyDestinationURL(msg.payload.url).then(messageToContent => {
+            port.postMessage({
+                command: CMD_DISPLAY_MESSAGE,
+                payload: {
+                    message: messageToContent
+                }
+            });
+        });
+    }
 }
 
 /**
@@ -152,17 +164,31 @@ function onMenuCreated() {
 
 /**
  * Handle event context menu clicked
- * If the original URL for the clicked link is in cache, copy it to clipboard
+ * Request content script to extract long URL from redirecting URL (if any)
  *
  * @param {*} info
  * @param {*} tab
  */
 function onClickContextMenu(info, tab) {
     if (info.menuItemId === MENU_ID_COPY_URL) {
-        var messageToContent;
-        getCachedUrl(info.linkUrl, cachedUrl => {
+        portFromContentScript.get(tab.id).postMessage({
+            command: CMD_EXTRACT_LONG_LINK_FROM_ANCHOR
+        });
+    }
+}
+
+/**
+ * If the original URL for the clicked link is in cache, copy it to clipboard
+ *
+ * @param {string} url
+ * @returns {Promise<string>} the message indicates whether destination URL copied successfully
+ */
+function copyDestinationURL(url) {
+    return new Promise(resolve => {
+        getCachedUrl(url, cachedUrl => {
+            let messageToContent;
             if (!!cachedUrl && Object.keys(cachedUrl).length > 0) {
-                const originalUrl = cachedUrl[info.linkUrl].originalUrl;
+                const originalUrl = cachedUrl[url].originalUrl;
                 if (!clipboardDom) {
                     clipboardDom = document.createElement('input');
                     clipboardDom.style.top = '-300px';
@@ -180,12 +206,8 @@ function onClickContextMenu(info, tab) {
             } else {
                 messageToContent = chrome.i18n.getMessage('msgNotSupportUrl');
             }
-            portFromContentScript.get(tab.id).postMessage({
-                command: CMD_DISPLAY_MESSAGE,
-                payload: {
-                    message: messageToContent
-                }
-            });
+
+            resolve(messageToContent);
         });
-    }
+    });
 }

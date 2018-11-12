@@ -80,8 +80,25 @@ function connectToBackgroundScript(callback) {
  * @param {any} msg
  */
 function onReceivingMsgBackgroundScript(msg) {
-    if (msg.command === CMD_DISPLAY_MESSAGE) {
-        displayMessage(msg.payload.message);
+    switch (msg.command) {
+        case CMD_DISPLAY_MESSAGE: {
+            displayMessage(msg.payload.message);
+            break;
+        }
+
+        case CMD_EXTRACT_LONG_LINK_FROM_ANCHOR: {
+            const longURL = extractLongLink(lastRightClickedAnchor);
+            backgroundPort.postMessage({
+                command: CMD_LONG_LINK_EXTRACTED,
+                payload: {
+                    url: longURL
+                }
+            });
+            break;
+        }
+
+        default:
+            break;
     }
 }
 

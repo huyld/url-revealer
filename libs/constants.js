@@ -12,6 +12,8 @@ const MENU_ID_COPY_URL = 'url-revealer-copy';
 // COMMANDS
 const CMD_DISPLAY_MESSAGE = 'display-message';
 const CMD_CHECK_AND_HANDLE_URL = 'check-and-handle-url';
+const CMD_EXTRACT_LONG_LINK_FROM_ANCHOR = 'extract-long-link-from-anchor';
+const CMD_LONG_LINK_EXTRACTED = 'long-link-extracted';
 
 // REGEX
 const FB_REDIRECT_URL_REGEX = /[^=]*=(.+)(?=&h=)/;
@@ -33,7 +35,7 @@ const WAITING_RETRY_MAX = 10;
 const TARGET_DOMS = {
     'facebook.com': [
         {   // Feed
-            selector: 'div[role="feed"]',
+            selector: 'div[role="main"]',
             mutable: true
         }
     ],
