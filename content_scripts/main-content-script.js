@@ -8,6 +8,9 @@ var backgroundPort;
 // DOM object to display message
 var announcer;
 
+// The last anchor element that was right-clicked
+var lastRightClickedAnchor;
+
 (function() {
     createAnnouncer();
 
@@ -77,8 +80,25 @@ function connectToBackgroundScript(callback) {
  * @param {any} msg
  */
 function onReceivingMsgBackgroundScript(msg) {
-    if (msg.command === CMD_DISPLAY_MESSAGE) {
-        displayMessage(msg.payload.message);
+    switch (msg.command) {
+        case CMD_DISPLAY_MESSAGE: {
+            displayMessage(msg.payload.message);
+            break;
+        }
+
+        case CMD_EXTRACT_LONG_LINK_FROM_ANCHOR: {
+            const longURL = extractLongLink(lastRightClickedAnchor);
+            backgroundPort.postMessage({
+                command: CMD_LONG_LINK_EXTRACTED,
+                payload: {
+                    url: longURL
+                }
+            });
+            break;
+        }
+
+        default:
+            break;
     }
 }
 
@@ -156,7 +176,7 @@ function observeMutation(observedTarget) {
                                 return Array.from(node.querySelectorAll('a'));
                             }
                         } else {
-                            return node.nodeName.toLowerCase() === 'a' ? [node] : null;
+                            return node.nodeName.toLowerCase() === 'a' ? [node] : Array.from(node.querySelectorAll('a'));
                         }
                     }
                 ).filter(node => !!node && node.length);
@@ -182,55 +202,11 @@ function processAnchorElements(anchors) {
 
     for (let i = 0; i < anchors.length; i++) {
         const anchor = anchors[i];
-        var url = '';
+        const url = extractLongLink(anchor);
 
-        switch (currentDomain) {
-            // External links in somesites aren't exposed initially.
-            // Thus we need to detect and decode it
-            // before sending to background script for further processing
-            case FACEBOOK_COM: {
-                const href = anchor.href;
-                if (href.indexOf(FACEBOOK_REDIRECT_URL) > -1) {
-                    // If this URL is an external link, get the external URL and decode it
-                    let matches = href.match(FB_REDIRECT_URL_REGEX);
-                    if (!!matches && matches.length > 1) {
-                        const encodedURL = matches[1];
-                        url = decodeURIComponent(encodedURL);
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-                break;
-            }
+        // Add listener for right-click callback
+        addOnContextMenuEventListener(anchor);
 
-            case TWITTER_COM: {
-                const expandedUrl = anchor.getAttribute('data-expanded-url');
-                url = expandedUrl ? expandedUrl : '';
-                break;
-            }
-
-            case YOUTUBE_COM: {
-                const href = anchor.href;
-                if (href.indexOf(YOUTUBE_REDIRECT_URL) > -1) {
-                    // If this URL is an external link, get the external URL and decode it
-                    let matches = href.match(YOUTUBE_REDIRECT_URL_REGEX);
-                    if (!!matches && matches.length > 1) {
-                        const encodedURL = matches[1];
-                        url = decodeURIComponent(encodedURL);
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-                break;
-            }
-
-            default:
-                url = anchor.href;
-        }
         if (url !== '') {
             sendURLToBackground(url).then(response => {
                 if (response.success) {
@@ -245,6 +221,57 @@ function processAnchorElements(anchors) {
             });
         }
     }
+}
+
+/**
+ * Extract the external link from the redirect URL (if any)
+ * (Some sites wrap external links with redirect URL)
+ *
+ * @param {Element} anchor the anchor tag
+ * @returns {string} the external link
+ */
+function extractLongLink(anchor) {
+    let url = '';
+    switch (currentDomain) {
+        // External links in some sites aren't exposed initially.
+        // Thus we need to detect and decode it
+        // before sending to background script for further processing
+        case FACEBOOK_COM: {
+            const href = anchor.href;
+            if (href.indexOf(FACEBOOK_REDIRECT_URL) > -1) {
+                // If this URL is an external link, get the external URL and decode it
+                let matches = href.match(FB_REDIRECT_URL_REGEX);
+                if (!!matches && matches.length > 1) {
+                    const encodedURL = matches[1];
+                    url = decodeURIComponent(encodedURL);
+                }
+            }
+            break;
+        }
+
+        case TWITTER_COM: {
+            const expandedUrl = anchor.getAttribute('data-expanded-url');
+            url = expandedUrl ? expandedUrl : '';
+            break;
+        }
+
+        case YOUTUBE_COM: {
+            const href = anchor.href;
+            if (href.indexOf(YOUTUBE_REDIRECT_URL) > -1) {
+                // If this URL is an external link, get the external URL and decode it
+                let matches = href.match(YOUTUBE_REDIRECT_URL_REGEX);
+                if (!!matches && matches.length > 1) {
+                    const encodedURL = matches[1];
+                    url = decodeURIComponent(encodedURL);
+                }
+            }
+            break;
+        }
+
+        default:
+            url = anchor.href;
+    }
+    return url;
 }
 
 /**
@@ -275,4 +302,16 @@ function displayMessage(msg, isURL = false) {
 function hideMessage() {
     announcer.textContent = '';
     announcer.classList.remove(CSS_ANNOUNCER_SHOW_CLASS, CSS_ANIMATION_NO_REPEAT_CLASS);
+}
+
+/**
+ * Save the anchor element that user right-clicks on
+ *
+ * @param {Element} anchor
+ */
+function addOnContextMenuEventListener(anchor) {
+    anchor.addEventListener('contextmenu', event => {
+        lastRightClickedAnchor = event.target;
+        return true;
+    });
 }
