@@ -176,7 +176,7 @@ function observeMutation(observedTarget) {
                                 return Array.from(node.querySelectorAll('a'));
                             }
                         } else {
-                            return node.nodeName.toLowerCase() === 'a' ? [node] : null;
+                            return node.nodeName.toLowerCase() === 'a' ? [node] : Array.from(node.querySelectorAll('a'));
                         }
                     }
                 ).filter(node => !!node && node.length);
