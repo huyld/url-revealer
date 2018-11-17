@@ -16,6 +16,7 @@
     border-radius: 5px;
     pointer-events: none;
     overflow: hidden;
+    z-index: 9999;
 }
 
 .url-revealer-announcer-show.url-revealer-animation-no-repeat {
