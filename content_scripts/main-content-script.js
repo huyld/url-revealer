@@ -317,7 +317,7 @@ function hideMessage() {
  */
 function addOnContextMenuEventListener(anchor) {
     anchor.addEventListener('contextmenu', event => {
-        lastRightClickedAnchor = event.target;
+        lastRightClickedAnchor = anchor;
         return true;
     });
 }
