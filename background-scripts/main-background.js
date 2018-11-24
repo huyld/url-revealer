@@ -26,9 +26,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         msg.payload
     );
     if (msg.command === CMD_CHECK_AND_HANDLE_URL) {
-        processURL(msg.payload.url).then(response => {
-            sendResponse(response);
-        });
+        processURL(msg.payload.url)
+            .then(response => {
+                sendResponse(response);
+            }).catch(errorResponse => {
+                console.info(EXT_NAME + ': Unable to send request to shortened URL. Detail: ', errorResponse.message);
+                sendResponse(errorResponse);
+            });
     }
     return true;
 });
@@ -118,10 +122,10 @@ function isURLSupported(url) {
  * Use cached data if available.
  *
  * @param {string} url
- * @returns
+ * @returns {Promise<{success: boolean, originalURL?: string, message?: string}}
  */
 function processURL(url) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         if (isURLSupported(url)) {
             getCachedUrl(url, storedInfo => {
                 var response = {};
@@ -138,6 +142,11 @@ function processURL(url) {
                             response['originalURL'] = originalURL;
                             resolve(response);
                         });
+                    })
+                    .catch(error => {
+                        response['success'] = false;
+                        response['message'] = error.toString();
+                        reject(response);
                     });
                 }
             });

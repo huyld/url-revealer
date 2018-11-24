@@ -221,6 +221,8 @@ function processAnchorElements(anchors) {
                     anchor.addEventListener('mouseleave', e => {
                         hideMessage();
                     });
+                } else {
+                    console.debug(`${EXT_NAME}: response for URL ${url}:\n     ${response.message}.`);
                 }
             });
         }
