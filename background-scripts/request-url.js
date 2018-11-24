@@ -27,10 +27,15 @@ function requestUrl(sourceUrl) {
  * @param {*} event
  */
 function onStateChangeCallback(resolve, reject, xhr, event) {
-    if (event.target.readyState == 2) {
-        resolve(event.target.responseURL);
-
-        // Only the header is necessary
+    if (event.target.status >= 400) {
+        reject(new Error(`HTTP status ${event.target.status}`));
         xhr.abort();
+    } else {
+        if (event.target.readyState == 2) {
+            resolve(event.target.responseURL);
+
+            // Only the header is necessary
+            xhr.abort();
+        }
     }
 }
