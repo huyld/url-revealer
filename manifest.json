@@ -15,10 +15,10 @@
     },
 
     "icons": {
-        "16": "assets/main-icon@16px.png",
-        "48": "assets/main-icon@48px.png",
-        "96": "assets/main-icon@96px.png",
-        "128": "assets/main-icon@128px.png"
+        "16": "assets/main-icon.svg",
+        "48": "assets/main-icon.svg",
+        "96": "assets/main-icon.svg",
+        "128": "assets/main-icon.svg"
     },
 
     "permissions": [
