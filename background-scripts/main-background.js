@@ -153,6 +153,7 @@ function processURL(url) {
         } else {
             var response = {};
             response['success'] = false;
+            response['message'] = chrome.i18n.getMessage('msgNotSupportUrl2', url);
             resolve(response);
         }
     });

@@ -222,7 +222,7 @@ function processAnchorElements(anchors) {
                         hideMessage();
                     });
                 } else {
-                    console.debug(`${EXT_NAME}: response for URL ${url}:\n     ${response.message}.`);
+                    console.debug(`${EXT_NAME}: response for URL ${url}:\n     ${response.message}`);
                 }
             });
         }
