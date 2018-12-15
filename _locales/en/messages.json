@@ -22,5 +22,14 @@
     "msgNotSupportUrl": {
         "message": "This domain is not supported.",
         "description": "Message displays when user clicks on supported link."
+    },
+    "msgNotSupportUrl2": {
+        "message": "URL $url$ is not supported.",
+        "description": "Error message to be sent to content script when the URL is not supported",
+        "placeholders": {
+            "url" : {
+                "content" : "$1"
+            }
+        }
     }
 }

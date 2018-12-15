@@ -13,7 +13,7 @@ It reveals the true destination of shortened URLs. So you know where you're head
 - Mozilla Firefox: [Firefox Addon](https://addons.mozilla.org/en-US/firefox/addon/url-revealer/)
 
 ## Example
-After installed the extension, direct [here](../demo/demo.html) to see it works.
+After installed the extension, direct [here](https://huyld.github.io/url-revealer/demo/) to see it works.
 
 ## Feature request and bug report
 You can request for supporting new URL shortening service by open a issue [here](https://github.com/huyld/url-revealer/issues/new?template=feature_request--support-new-service.md).
