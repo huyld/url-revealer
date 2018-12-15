@@ -10,6 +10,11 @@ function requestUrl(sourceUrl) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onStateChangeCallback.bind(this, resolve, reject, xhr);
         switch (hostname) {
+            case BITLY_IS:
+            case DOIOP_COM:
+            case TINYURL_COM:
+                xhr.open('GET', sourceUrl, true);
+                break;
             default:
                 xhr.open('HEAD', sourceUrl, true);
                 break;
